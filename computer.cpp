@@ -3,6 +3,8 @@
 
 using namespace std;
 
+/* ================= Constructor ================= */
+
 Computer::Computer(int boardSize, int diff) {
 
     size = boardSize;
@@ -27,8 +29,11 @@ bool Computer::canPlace(int row, int col, int length, bool horizontal) {
         int r = horizontal ? row : row + i;
         int c = horizontal ? col + i : col;
 
-        if(r >= size || c >= size) return false;
-        if(shipBoard[r][c] != 0) return false;
+        if(r >= size || c >= size)
+            return false;
+
+        if(shipBoard[r][c] != 0)
+            return false;
     }
 
     return true;
@@ -49,25 +54,31 @@ void Computer::placeShip(int length) {
                 int c = horizontal ? col + i : col;
                 shipBoard[r][c] = 1;
             }
+
             break;
         }
     }
 }
 
 void Computer::placeAllShips() {
+
     for(int length : shipLengths)
         placeShip(length);
 }
 
+/* ================= Receive Shot ================= */
+
 bool Computer::receiveShot(int row, int col) {
 
     if(shipBoard[row][col] == 1) {
-        shipBoard[row][col] = 2;
+        shipBoard[row][col] = 2;   // 2 = destroyed
         return true;
     }
 
     return false;
 }
+
+/* ================= Check Win ================= */
 
 bool Computer::allShipsDestroyed() const {
 
@@ -79,11 +90,7 @@ bool Computer::allShipsDestroyed() const {
     return true;
 }
 
-const vector<vector<int>>& Computer::getShipBoard() const {
-    return shipBoard;
-}
-
-/* ================= AI ================= */
+/* ================= AI Core ================= */
 
 pair<int,int> Computer::makeMove() {
 
@@ -94,6 +101,8 @@ pair<int,int> Computer::makeMove() {
     else
         return hardMove();
 }
+
+/* -------- Easy Mode -------- */
 
 pair<int,int> Computer::randomMove() {
 
@@ -107,6 +116,8 @@ pair<int,int> Computer::randomMove() {
     return {r, c};
 }
 
+/* -------- Medium Mode -------- */
+
 pair<int,int> Computer::mediumMove() {
 
     if(!targets.empty()) {
@@ -118,8 +129,11 @@ pair<int,int> Computer::mediumMove() {
     return randomMove();
 }
 
+/* -------- Hard Mode -------- */
+
 pair<int,int> Computer::hardMove() {
 
+    // Continue locked direction
     if(directionLocked && !hitStack.empty()) {
 
         int lastRow = hitStack.back().first;
@@ -143,9 +157,13 @@ pair<int,int> Computer::hardMove() {
     return randomMove();
 }
 
+/* ================= AI Feedback ================= */
+
 void Computer::markResult(int row, int col, bool hit) {
 
     attackBoard[row][col] = hit ? 1 : -1;
+
+    /* -------- Medium AI Behavior -------- */
 
     if(difficulty == 2 && hit) {
 
@@ -155,6 +173,7 @@ void Computer::markResult(int row, int col, bool hit) {
         };
 
         for(auto &p : neighbors) {
+
             int r = p.first;
             int c = p.second;
 
@@ -166,6 +185,8 @@ void Computer::markResult(int row, int col, bool hit) {
             }
         }
     }
+
+    /* -------- Hard AI Behavior -------- */
 
     if(difficulty == 3 && hit) {
 
