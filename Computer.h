@@ -4,38 +4,38 @@
 #include <vector>
 #include <utility>
 
-/*
-   Computer class:
-   - Places ships randomly
-   - Generates AI moves
-   - Supports 3 difficulty levels
-*/
-
 class Computer {
 private:
-    int size;
-    int difficulty; // 1 = Easy, 2 = Medium, 3 = Hard
+    int size;          // Board size (10)
+    int difficulty;    // 1=Easy, 2=Medium, 3=Hard
 
-    // Ship board (0 empty, 1 ship)
+    // 0 = empty
+    // 1 = ship
+    // 2 = destroyed
     std::vector<std::vector<int>> shipBoard;
 
-    // Attack memory (0 unknown, 1 hit, -1 miss)
+    // AI memory
+    // 0 = not attacked
+    // 1 = hit
+    // -1 = miss
     std::vector<std::vector<int>> attackBoard;
 
     std::vector<int> shipLengths;
 
-    // Medium mode
+    // Medium AI
     std::vector<std::pair<int,int>> targets;
 
-    // Hard mode
+    // Hard AI
     std::vector<std::pair<int,int>> hitStack;
     bool directionLocked;
     int dirRow;
     int dirCol;
 
+    // Ship placement helpers
     bool canPlace(int row, int col, int length, bool horizontal);
     void placeShip(int length);
 
+    // AI move types
     std::pair<int,int> randomMove();
     std::pair<int,int> mediumMove();
     std::pair<int,int> hardMove();
@@ -44,8 +44,15 @@ public:
     Computer(int boardSize, int diff);
 
     void placeAllShips();
+
+    // When player shoots computer
+    bool receiveShot(int row, int col);
+
+    bool allShipsDestroyed() const;
+
     const std::vector<std::vector<int>>& getShipBoard() const;
 
+    // AI shooting
     std::pair<int,int> makeMove();
     void markResult(int row, int col, bool hit);
 };
