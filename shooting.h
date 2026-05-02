@@ -1,8 +1,8 @@
 #ifndef SHOOTING_H
 #define SHOOTING_H
 
-#include "Player.h"
-#include "Computer.h"
+#include "player.h"
+#include "computer.h"
 
 class Shooting {
 private:
