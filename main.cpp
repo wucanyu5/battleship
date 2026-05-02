@@ -3,9 +3,9 @@
 #include <cstdlib>
 #include <fstream>   // ✅ File I/O
 
-#include "Player.h"
-#include "Computer.h"
-#include "Shooting.h"
+#include "player.h"
+#include "computer.h"
+#include "shooting.h"
 
 using namespace std;
 
