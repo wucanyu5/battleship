@@ -1,28 +1,28 @@
-#include <String>
+#ifndef PLAYER_H
+#define PLAYER_H
 
-#ifndef __PLAYER__
-#define __PLAYER__
-
-using namespace std;
-
-const int EIL = 12;
-const int STULP = 12;
-extern int Board[EIL + 1][STULP + 1];
+#include <vector>
 
 class Player {
 private:
-	int x, y;
-	string Cord;
-	char pos;
-public:
-	Player();
-	Player(int a, int b, string c, char d);
-	~Player();
+    static const int SIZE = 10;
 
-	void Draw_Board();
-	void Input_Coord();
-	void Input_Pos();
-	void Update_Coord(int i);
+    // 0 = empty
+    // 1 = ship
+    // 3 = hit
+    // 4 = miss
+    std::vector<std::vector<int>> shipBoard;
+
+public:
+    Player();
+
+    void placeShips();   // simple random placement
+    void drawBoard(bool showShips = true) const;
+
+    bool receiveShot(int row, int col);
+    bool allShipsDestroyed() const;
+
+    const std::vector<std::vector<int>>& getBoard() const;
 };
 
-#endif // !__Player__
+#endif
