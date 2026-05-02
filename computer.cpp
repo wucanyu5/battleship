@@ -1,4 +1,4 @@
-#include "Computer.h"
+#include "computer.h"
 #include <cstdlib>
 
 using namespace std;
