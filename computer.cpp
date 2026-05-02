@@ -3,8 +3,8 @@
 
 using namespace std;
 
-/* Constructor */
 Computer::Computer(int boardSize, int diff) {
+
     size = boardSize;
     difficulty = diff;
 
@@ -59,6 +59,26 @@ void Computer::placeAllShips() {
         placeShip(length);
 }
 
+bool Computer::receiveShot(int row, int col) {
+
+    if(shipBoard[row][col] == 1) {
+        shipBoard[row][col] = 2;
+        return true;
+    }
+
+    return false;
+}
+
+bool Computer::allShipsDestroyed() const {
+
+    for(int i = 0; i < size; i++)
+        for(int j = 0; j < size; j++)
+            if(shipBoard[i][j] == 1)
+                return false;
+
+    return true;
+}
+
 const vector<vector<int>>& Computer::getShipBoard() const {
     return shipBoard;
 }
@@ -75,7 +95,6 @@ pair<int,int> Computer::makeMove() {
         return hardMove();
 }
 
-/* Easy: random shooting */
 pair<int,int> Computer::randomMove() {
 
     int r, c;
@@ -88,7 +107,6 @@ pair<int,int> Computer::randomMove() {
     return {r, c};
 }
 
-/* Medium: attack neighbors after hit */
 pair<int,int> Computer::mediumMove() {
 
     if(!targets.empty()) {
@@ -100,10 +118,8 @@ pair<int,int> Computer::mediumMove() {
     return randomMove();
 }
 
-/* Hard: direction locking and chasing */
 pair<int,int> Computer::hardMove() {
 
-    // Continue in locked direction
     if(directionLocked && !hitStack.empty()) {
 
         int lastRow = hitStack.back().first;
@@ -124,41 +140,13 @@ pair<int,int> Computer::hardMove() {
         }
     }
 
-    // One hit → try neighbors
-    if(hitStack.size() == 1) {
-
-        int row = hitStack[0].first;
-        int col = hitStack[0].second;
-
-        vector<pair<int,int>> neighbors = {
-            {row-1,col},{row+1,col},
-            {row,col-1},{row,col+1}
-        };
-
-        for(auto &p : neighbors) {
-            int r = p.first;
-            int c = p.second;
-
-            if(r>=0 && r<size &&
-               c>=0 && c<size &&
-               attackBoard[r][c] == 0) {
-
-                return {r,c};
-            }
-        }
-    }
-
     return randomMove();
 }
 
-/* Process shot result */
 void Computer::markResult(int row, int col, bool hit) {
 
     attackBoard[row][col] = hit ? 1 : -1;
 
-    if(difficulty == 1) return;
-
-    // Medium behavior
     if(difficulty == 2 && hit) {
 
         vector<pair<int,int>> neighbors = {
@@ -179,7 +167,6 @@ void Computer::markResult(int row, int col, bool hit) {
         }
     }
 
-    // Hard behavior
     if(difficulty == 3 && hit) {
 
         hitStack.push_back({row,col});
