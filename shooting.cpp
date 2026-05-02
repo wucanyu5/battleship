@@ -1,4 +1,4 @@
-#include "Shooting.h"
+#include "shooting.h"
 #include <iostream>
 #include <cctype>
 
