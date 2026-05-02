@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include <fstream>   // ✅ File I/O
+#include <fstream>  
 
 #include "player.h"
 #include "computer.h"
@@ -78,7 +78,7 @@ int main() {
     cin.get();
 
     int round = 1;
-    string winner;   // ✅ Track winner
+    string winner;   
 
     /* ================= Game Loop ================= */
 
