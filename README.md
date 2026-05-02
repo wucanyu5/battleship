@@ -89,8 +89,37 @@ Each class has clear responsibilities:
 - Private and public member separation.
 - Clear separation of responsibilities.
 
+### 6. File Input/Output
+
+After each game finishes, the result (winner, difficulty, and total rounds) is saved automatically into a file named `game_result.txt`.
+
+Example output:
+
+===== Battleship Game Result =====
+Winner: Player
+Difficulty: 2
+Total Rounds: 15
+
 ---
 
-## Compilation Instructions
+## Compilation
 
-To compile the project:
+To compile:
+
+make
+
+To run:
+
+./main
+
+To clean:
+
+make clean
+
+---
+
+## Environment
+
+- C++17
+- g++
+- Linux
