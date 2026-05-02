@@ -90,7 +90,7 @@ void Shooting::drawBoards(const Player& player, const Computer& cpu) {
     cout << "\n--- COMPUTER BOARD ---\n";
 
     const auto& board = cpu.getShipBoard();
-    int size = board.size();   // ✅ FIXED (no more SIZE error)
+    int size = board.size();   
 
     cout << "   ";
     for(int i = 0; i < size; i++)
