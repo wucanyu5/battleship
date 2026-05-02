@@ -90,6 +90,12 @@ bool Computer::allShipsDestroyed() const {
     return true;
 }
 
+/* ================= Getter ================= */
+
+const vector<vector<int>>& Computer::getShipBoard() const {
+    return shipBoard;
+}
+
 /* ================= AI Core ================= */
 
 pair<int,int> Computer::makeMove() {

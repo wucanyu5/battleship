@@ -4,6 +4,7 @@
 
 using namespace std;
 
+/* ================= Parse Player Input ================= */
 bool Shooting::parseInput(int& row, int& col) {
 
     string input;
@@ -28,12 +29,28 @@ bool Shooting::parseInput(int& row, int& col) {
     return true;
 }
 
+/* ================= Player Turn ================= */
 void Shooting::playerTurn(Player& player, Computer& cpu) {
 
     int row, col;
 
-    while(!parseInput(row, col))
-        cout << "Invalid input.\n";
+    while(true) {
+
+        if(!parseInput(row, col)) {
+            cout << "Invalid input. Try again.\n";
+            continue;
+        }
+
+        // Prevent shooting same place twice
+        const auto& board = cpu.getShipBoard();
+
+        if(board[row][col] == 2) {
+            cout << "You already destroyed that location!\n";
+            continue;
+        }
+
+        break;
+    }
 
     bool hit = cpu.receiveShot(row, col);
 
@@ -43,6 +60,7 @@ void Shooting::playerTurn(Player& player, Computer& cpu) {
         cout << "Player MISS!\n";
 }
 
+/* ================= Computer Turn ================= */
 void Shooting::computerTurn(Player& player, Computer& cpu) {
 
     auto move = cpu.makeMove();
@@ -63,6 +81,7 @@ void Shooting::computerTurn(Player& player, Computer& cpu) {
     cpu.markResult(row, col, hit);
 }
 
+/* ================= Draw Boards ================= */
 void Shooting::drawBoards(const Player& player, const Computer& cpu) {
 
     cout << "\n--- PLAYER BOARD ---\n";
@@ -71,18 +90,25 @@ void Shooting::drawBoards(const Player& player, const Computer& cpu) {
     cout << "\n--- COMPUTER BOARD ---\n";
 
     const auto& board = cpu.getShipBoard();
+    int size = board.size();   // ✅ FIXED (no more SIZE error)
 
-    cout << "   0 1 2 3 4 5 6 7 8 9\n";
+    cout << "   ";
+    for(int i = 0; i < size; i++)
+        cout << i << " ";
+    cout << "\n";
 
-    for(int i = 0; i < SIZE; i++) {
-        cout << char('A'+i) << "  ";
-        for(int j = 0; j < SIZE; j++) {
+    for(int i = 0; i < size; i++) {
+
+        cout << char('A' + i) << "  ";
+
+        for(int j = 0; j < size; j++) {
 
             if(board[i][j] == 2)
                 cout << "X ";
             else
                 cout << ". ";
         }
+
         cout << endl;
     }
 }
