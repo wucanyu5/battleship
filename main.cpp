@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <fstream>   // ✅ File I/O
 
 #include "Player.h"
 #include "Computer.h"
@@ -77,6 +78,7 @@ int main() {
     cin.get();
 
     int round = 1;
+    string winner;   // ✅ Track winner
 
     /* ================= Game Loop ================= */
 
@@ -96,6 +98,7 @@ int main() {
 
         if(cpu.allShipsDestroyed()) {
             cout << "\n\n                       🏆  YOU WIN THE WAR!  🏆\n\n";
+            winner = "Player";
             break;
         }
 
@@ -104,6 +107,7 @@ int main() {
 
         if(player.allShipsDestroyed()) {
             cout << "\n\n                      💀  YOUR FLEET HAS FALLEN  💀\n\n";
+            winner = "Computer";
             break;
         }
 
@@ -124,6 +128,18 @@ int main() {
 
     cout << "\n\n                              GAME OVER\n\n";
     cout << "=============================================================================\n\n";
+
+    /* ================= Save Game Result ================= */
+
+    ofstream outFile("game_result.txt");
+
+    if(outFile.is_open()) {
+        outFile << "===== Battleship Game Result =====\n";
+        outFile << "Winner: " << winner << "\n";
+        outFile << "Difficulty: " << difficulty << "\n";
+        outFile << "Total Rounds: " << round << "\n";
+        outFile.close();
+    }
 
     return 0;
 }
